@@ -1,20 +1,25 @@
-version: "3.8"
 # Compose file build variables set in .env
 services:
   supervisor:
     platform: linux/amd64
     build:
+      # CHANGE 1: The context MUST be '.', the root folder of your project,
+      # so the Dockerfile can find the COPY_ROOT folders.
       context: ./build
       args:
-        PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
+        PYTHON_VERSION: ${PYTHON_VERSION:-3.12}
         PYTORCH_VERSION: ${PYTORCH_VERSION:-2.4.1}
         COMFYUI_BUILD_REF: ${COMFYUI_BUILD_REF:-}
-        # Base on Python image which is base + python + jupyter
-        IMAGE_BASE: ${IMAGE_BASE:-ghcr.io/ai-dock/python:${PYTHON_VERSION:-3.10}-v2-cuda-12.1.1-base-22.04}
-      tags:
-        - "ghcr.io/ai-dock/comfyui:${IMAGE_TAG:-pytorch-${PYTORCH_VERSION:-2.3.0}-py3.10-v2-cuda-12.1.1-base-22.04}"
+        # CHANGE 4: REMOVE the IMAGE_BASE from here. Your Dockerfile now
+        # sets its own base image in the FROM line, and this would override it.
+        # This keeps all the base image logic in your Dockerfile.
+    
+    # CHANGE 5: REMOVE the entire complex "tags" block. We will set a simple
+    # image name below.
         
-    image: ghcr.io/ai-dock/comfyui:${IMAGE_TAG:-pytorch-${PYTORCH_VERSION:-2.3.0}-py3.10-v2-cuda-12.1.1-base-22.04}
+    # CHANGE 6: REPLACE the complex image name with your desired name.
+    # This is the only name you need.
+    image: phonehomephone/comfyui-py312:latest
     
     ## For Nvidia GPU's - You probably want to uncomment this
     #deploy:
@@ -57,7 +62,7 @@ services:
         - ${SYNCTHING_TRANSPORT_PORT_HOST:-22999}:${SYNCTHING_TRANSPORT_PORT_HOST:-22999}
    
     environment:
-        # Don't enclose values in quotes
+        # This part below does not need any changes.
         - AUTO_UPDATE=${AUTO_UPDATE:-false}
         - DIRECT_ADDRESS=${DIRECT_ADDRESS:-127.0.0.1}
         - DIRECT_ADDRESS_GET_WAN=${DIRECT_ADDRESS_GET_WAN:-false}

@@ -36,7 +36,6 @@ build_common_create_venv() {
         --display-name="Python${PYTHON_VERSION} (api-wrapper)"
 }
 
-
 build_common_run_tests() {
     installed_pytorch_version=$("$COMFYUI_VENV_PYTHON" -c "import torch; print(torch.__version__)")
     if [[ "$installed_pytorch_version" != "$PYTORCH_VERSION"* ]]; then

@@ -1,3 +1,14 @@
+# --- IMPORTANT NOTE FOR MAINTAINERS ---
+# The packages below (especially fastapi and uvicorn) are pinned to older versions
+# that are INCOMPATIBLE with Python 3.12 and will cause a runtime error.
+#
+# To fix this, the Docker build process intentionally uses the '--upgrade' flag
+# in 'build/COPY_ROOT_1/opt/ai-dock/bin/build/common.sh' during the pip install.
+#
+# DO NOT REMOVE THE --upgrade FLAG FROM THE BUILD SCRIPT UNLESS YOU MANUALLY
+# UPDATE THE VERSION NUMBERS IN THIS FILE.
+# ------------------------------------
+
 aiocache
 pydantic>=2
 aiobotocore
